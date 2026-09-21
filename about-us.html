@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Noir — About us</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root{--black:#000;--white:#fff;--stone:#efece7;--grey:#f6f5f3;--mid:#767676;--line:#dcdad6;--serif:'Cormorant Garamond',Georgia,serif;--sans:'Lato',system-ui,sans-serif;--nav-h:72px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);font-weight:300;color:var(--black);background:var(--white);line-height:1.7;padding-top:var(--nav-h)}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+img{display:block;width:100%;height:100%;object-fit:cover}
+svg{fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+.label{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--mid);margin-bottom:.8rem}
+h1,h2{font-family:var(--serif);font-weight:400;line-height:1.05}
+em{font-style:italic;font-weight:300}
+section{padding:6rem 4vw}
+
+/* NAV */
+nav{position:fixed;inset:0 0 auto 0;height:var(--nav-h);z-index:50;display:flex;align-items:center;justify-content:space-between;padding:0 4vw;background:var(--white);border-bottom:1px solid var(--line)}
+.logo{font-family:var(--serif);font-size:1.9rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600}
+.nav-links{display:flex;gap:2.4rem}
+.nav-links a{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;padding:.4rem 0;border-bottom:1px solid transparent}
+.nav-links a:hover,.nav-links a.active{border-color:var(--black)}
+.nav-right{display:flex;align-items:center;gap:1.3rem}
+.nav-right svg{width:20px;height:20px}
+.nav-right a{display:flex}
+.hamburger{display:none;background:none;border:0;cursor:pointer;width:32px;height:32px;flex-direction:column;justify-content:center;gap:6px}
+.hamburger span{display:block;height:1.5px;background:var(--black)}
+
+/* HERO (no video) */
+.hero{display:grid;grid-template-columns:1.1fr 1fr;gap:4vw;align-items:center;min-height:calc(100vh - var(--nav-h));max-height:820px;background:var(--stone);padding-top:3rem;padding-bottom:3rem}
+.hero h1{font-size:clamp(5rem,15vw,12rem);letter-spacing:.02em}
+.hero-sub{font-size:1.15rem;max-width:34ch;margin-top:1rem}
+.scroll{display:inline-flex;align-items:center;gap:.5rem;margin-top:2.5rem;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase}
+.scroll svg{width:22px;height:22px}
+.portrait{aspect-ratio:4/5;max-height:70vh;margin-left:auto;width:100%;max-width:440px;background:var(--grey);overflow:hidden}
+
+/* ABOUT */
+.about{max-width:880px;margin:0 auto;text-align:center}
+.about h2{font-size:clamp(2.4rem,5vw,4rem);margin-bottom:1.5rem}
+.about p{font-size:1.1rem;color:#333}
+
+.stat{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;background:var(--grey)}
+.stat-num{font-family:var(--serif);font-size:clamp(5rem,12vw,9rem);line-height:1}
+.stat p{color:#333;margin-top:1rem;max-width:52ch}
+.stat-img{aspect-ratio:4/3;background:var(--stone);overflow:hidden}
+
+/* SKILLS (new) */
+.skills{text-align:center}
+.skills h2{font-size:clamp(2rem,4vw,3rem);margin-bottom:2rem}
+.chips{display:flex;flex-wrap:wrap;gap:.7rem;justify-content:center;max-width:720px;margin:0 auto}
+.chips li{border:1px solid var(--black);padding:.5rem 1.4rem;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;transition:.25s}
+.chips li:hover{background:var(--black);color:var(--white)}
+
+/* QUOTE BAND */
+.quote{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;background:var(--black);color:var(--white)}
+.quote-img{aspect-ratio:4/3;background:#1a1a1a;overflow:hidden}
+.quote svg{width:34px;height:34px;margin-bottom:1.2rem}
+.quote p{font-family:var(--serif);font-style:italic;font-size:clamp(1.8rem,3.4vw,2.8rem);line-height:1.25}
+
+footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;padding:2.5rem 4vw;font-size:.8rem;color:var(--mid)}
+footer .logo{font-size:1.4rem;color:var(--black)}
+
+@media(max-width:800px){
+  section{padding:4rem 5vw}
+  .hamburger{display:flex}
+  .nav-links{position:absolute;top:100%;left:0;right:0;background:var(--white);flex-direction:column;gap:0;border-bottom:1px solid var(--line);display:none}
+  .nav-links.open{display:flex}
+  .nav-links a{display:block;padding:1rem 5vw;border:0}
+  .hero,.stat,.quote{grid-template-columns:1fr;gap:2.5rem}
+  .hero{max-height:none}
+  .portrait{margin:0;max-width:none}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<nav aria-label="Main">
+  <a class="logo" href="home.html">KBANH</a>
+  <ul class="nav-links" id="links">
+    <li><a href="home.html">Home</a></li>
+    <li><a href="Viewwomen.html">Women</a></li>
+    <li><a href="viewmen.html">Men</a></li>
+    <li><a href="about-us.html" class="active" aria-current="page">About us</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="Register.html" aria-label="Account"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
+    <button class="hamburger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="links"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<main>
+  <section class="hero">
+    <div>
+      <p class="label">About us</p>
+      <h1>Hello</h1>
+      <p class="hero-sub">— it's me Jeffmorningstar, the Developer of KBANH company</p>
+      <a class="scroll" href="#about">Scroll down
+        <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="4" x2="12" y2="20"/><polyline points="6 14 12 20 18 14"/></svg>
+      </a>
+    </div>  
+    <div class="portrait"><img src="Image/PROFILE.jpg" alt="Portrait of Jeff"></div>
+  </section>
+
+  <section class="about" id="about">
+    <p class="label">About me</p>
+    <h2>Building for the <em>web</em></h2>
+    <p>I am a passionate Full Stack Web Developer with strong knowledge in both front-end and back-end development. I enjoy building responsive, user-friendly, and dynamic web applications that solve real-world problems.</p>
+  </section>
+
+  <section class="stat">
+    <div>
+      <div class="stat-num">95%</div>
+      <p>of my work is focused on web development, and I have experience working with various technologies such as HTML, CSS, JavaScript, React, Node.js, and databases like MongoDB and MySQL. I am always eager to learn new technologies and stay updated with the latest trends in web development.</p>
+    </div>
+    <div class="stat-img"><img src="Image/CERIFICATE.png" alt="Web development work" loading="lazy"></div>
+  </section>
+
+  <section class="skills">
+    <p class="label">What I work with</p>
+    <h2>Tools &amp; <em>technologies</em></h2>
+    <ul class="chips">
+      <li>HTML</li><li>CSS</li><li>JavaScript</li><li>React</li><li>Angular</li><li>Node.js</li><li>MongoDB</li><li>MySQL</li><li>Git</li><li>GitHub</li><li>C#</li><li>Figma</li><li>API</li>
+    </ul>
+  </section>
+
+  <section class="quote">
+    <div class="quote-img"><img src="Image/ITCODE.jpg" alt="" loading="lazy"></div>
+    <div>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+      <p>I am interested in building real-world web applications.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <a class="logo" href="home.html">KABNH</a>
+  <span>© 2026 Noir. All rights reserved.</span>
+</footer>
+
+<script>
+const burger = document.getElementById('burger'), links = document.getElementById('links');
+burger.addEventListener('click', () => {
+  const open = links.classList.toggle('open');
+  burger.setAttribute('aria-expanded', open);
+});
+</script>
+</body>
+</html>
