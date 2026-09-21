@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pre-order Record</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg-main:#efece7;--bg-panel:#fff;--bg-field:#f6f5f3;--border-col:#dcdad6;--text-main:#000;--text-muted:#767676;--text-label:#333}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{min-height:100vh;font-family:'Inter',sans-serif;background:var(--bg-main);color:var(--text-main);padding:40px 20px}
+  .wrapper{max-width:720px;margin:0 auto}
+  .panel{background:var(--bg-panel);border:1px solid var(--border-col);border-radius:14px;box-shadow:0 30px 70px rgba(0,0,0,.12);padding:32px 30px}
+  .heading{font-family:'Poppins',sans-serif;font-weight:700;font-size:22px;letter-spacing:-.3px;margin-bottom:4px}
+  .subheading{font-size:13px;color:var(--text-muted);margin-bottom:24px}
+
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+  .stat{background:var(--bg-field);border:1px solid var(--border-col);border-radius:9px;padding:14px}
+  .stat span{display:block;font-size:12px;font-weight:600;color:var(--text-label)}
+  .stat b{font-family:'Poppins',sans-serif;font-size:22px;font-weight:700}
+
+  form{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:26px}
+  label{display:block;font-size:12.5px;font-weight:600;color:var(--text-label);margin-bottom:7px}
+  input,select{width:100%;padding:12px 14px;background:var(--bg-field);border:1px solid var(--border-col);border-radius:9px;font-family:'Inter',sans-serif;font-size:13.5px;color:var(--text-main);outline:none;transition:border-color .2s,box-shadow .2s}
+  input:focus,select:focus{border-color:#000;box-shadow:0 0 0 3px rgba(0,0,0,.08)}
+  input::placeholder{color:var(--text-muted)}
+  .submit-btn{grid-column:span 2;padding:14px;border:none;border-radius:9px;background:linear-gradient(135deg,#000,#2a2a2a);color:#fff;font-family:'Inter',sans-serif;font-weight:700;font-size:14.5px;cursor:pointer;transition:transform .2s,box-shadow .2s}
+  .submit-btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(0,0,0,.2)}
+
+  .table-wrap{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;min-width:460px}
+  th{text-align:left;font-size:12px;font-weight:600;color:var(--text-muted);padding:0 8px 10px;border-bottom:1px solid var(--border-col)}
+  td{padding:12px 8px;border-bottom:1px solid var(--border-col);font-size:13.5px}
+  td small{display:block;font-size:11.5px;color:var(--text-muted)}
+  .pill{border:1px solid #000;background:#000;color:#fff;border-radius:7px;padding:6px 12px;font:600 12px 'Inter',sans-serif;cursor:pointer;min-width:74px}
+  .pill.due{background:#fff;color:#000}
+  .del{background:none;border:0;color:var(--text-muted);font-size:18px;cursor:pointer}
+  .del:hover{color:#000}
+  #empty{text-align:center;color:var(--text-muted);font-size:13px;padding:22px 0}
+  @media(max-width:480px){.panel{padding:26px 20px}.stats{grid-template-columns:1fr}form{grid-template-columns:1fr}.submit-btn{grid-column:auto}}
+</style>
+</head>
+<body>
+<div class="wrapper"><div class="panel">
+  <div class="heading">Pre-order record</div>
+  <div class="subheading">Add each pre-order and mark it paid or not yet.</div>
+
+  <div class="stats">
+    <div class="stat"><span>Orders</span><b id="sOrders">0</b></div>
+    <div class="stat"><span>Paid</span><b id="sPaid">$0</b></div>
+    <div class="stat"><span>Not yet paid</span><b id="sDue">$0</b></div>
+  </div>
+
+  <form id="form">
+    <div><label for="fName">Customer</label><input type="text" id="fName" placeholder="Enter name" required></div>
+    <div><label for="fItem">Item</label><input type="text" id="fItem" placeholder="e.g. Classic dress" required></div>
+    <div><label for="fPrice">Price ($)</label><input type="number" id="fPrice" min="0" step="0.01" placeholder="0.00" required></div>
+    <div><label for="fPaid">Payment</label><select id="fPaid"><option value="due">Not yet</option><option value="paid">Paid</option></select></div>
+    <button type="submit" class="submit-btn">Add</button>
+  </form>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Customer</th><th>Item</th><th>Price</th><th>Payment</th><th></th></tr></thead>
+      <tbody id="body"></tbody>
+    </table>
+    <p id="empty">No pre-orders yet.</p>
+  </div>
+</div></div>
+
+<script>
+  const KEY = 'preorders', $ = id => document.getElementById(id);
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const money = n => '$' + (+n.toFixed(2));
+  let rows = [];
+  try { rows = JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) {}
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(rows)); } catch (e) {} };
+  const sum = paid => rows.filter(r => r.paid === paid).reduce((a, r) => a + r.price, 0);
+
+  function render() {
+    $('sOrders').textContent = rows.length;
+    $('sPaid').textContent = money(sum(true));
+    $('sDue').textContent = money(sum(false));
+    $('body').innerHTML = rows.map(r => `<tr>
+      <td>${esc(r.name)}<small>${esc(r.date)}</small></td>
+      <td>${esc(r.item)}</td>
+      <td>${money(r.price)}</td>
+      <td><button class="pill ${r.paid ? '' : 'due'}" data-act="toggle" data-id="${r.id}">${r.paid ? 'Paid' : 'Not yet'}</button></td>
+      <td><button class="del" data-act="del" data-id="${r.id}" aria-label="Delete">×</button></td></tr>`).join('');
+    $('empty').hidden = rows.length > 0;
+  }
+
+  $('form').addEventListener('submit', e => {
+    e.preventDefault();
+    rows.unshift({ id: Date.now(), date: new Date().toISOString().slice(0, 10), name: $('fName').value.trim(),
+      item: $('fItem').value.trim(), price: +$('fPrice').value, paid: $('fPaid').value === 'paid' });
+    save(); e.target.reset(); render();
+  });
+
+  $('body').addEventListener('click', e => {
+    const b = e.target.closest('button[data-act]'); if (!b) return;
+    const i = rows.findIndex(r => r.id == b.dataset.id); if (i < 0) return;
+    if (b.dataset.act === 'toggle') rows[i].paid = !rows[i].paid;
+    else if (confirm('Delete this pre-order?')) rows.splice(i, 1);
+    else return;
+    save(); render();
+  });
+  render();
+</script>
+</body>
+</html>

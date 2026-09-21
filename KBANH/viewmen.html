@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Noir — Men's Collection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root{--black:#000;--white:#fff;--stone:#efece7;--grey:#f6f5f3;--mid:#767676;--line:#dcdad6;--serif:'Cormorant Garamond',Georgia,serif;--sans:'Lato',system-ui,sans-serif;--nav-h:72px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);font-weight:300;color:var(--black);background:var(--white);line-height:1.6;padding-top:var(--nav-h)}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+img{display:block;width:100%;height:100%;object-fit:cover}
+svg{fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+.label{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--mid);margin-bottom:.6rem}
+h1,h2,h3{font-family:var(--serif);font-weight:400;line-height:1.1}
+em{font-style:italic;font-weight:300}
+.link{font-size:.8rem;letter-spacing:.08em;border-bottom:1px solid currentColor;padding-bottom:2px;white-space:nowrap}
+
+/* NAV */
+nav#nav{position:fixed;inset:0 0 auto 0;height:var(--nav-h);z-index:50;display:flex;align-items:center;justify-content:space-between;padding:0 4vw;background:var(--white);border-bottom:1px solid transparent;transition:height .3s,border-color .3s}
+nav#nav.scrolled{height:60px;border-color:var(--line)}
+.logo{font-family:var(--serif);font-size:1.9rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600}
+.nav-links{display:flex;gap:2.4rem;height:100%}
+.nav-links>li{display:flex;align-items:center}
+.nav-links>li>a{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;padding:.4rem 0;border-bottom:1px solid transparent}
+.nav-links>li>a:hover,.nav-links a.active{border-color:var(--black)}
+.dropdown{position:absolute;left:0;right:0;top:100%;background:var(--white);border-bottom:1px solid var(--line);opacity:0;visibility:hidden;transform:translateY(-6px);transition:.25s}
+.nav-item:hover .dropdown,.nav-item:focus-within .dropdown{opacity:1;visibility:visible;transform:none}
+.dropdown-inner{display:grid;grid-template-columns:repeat(3,1fr) 1.3fr;gap:3rem;padding:2.5rem 4vw}
+.dropdown h4{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mid);margin-bottom:1rem;font-weight:400}
+.dropdown li a{display:block;padding:.25rem 0;font-size:.9rem;transition:padding .2s}
+.dropdown li a:hover{padding-left:.4rem}
+.dropdown-featured{background:var(--stone);padding:1.6rem;display:flex;flex-direction:column;justify-content:space-between;gap:1rem}
+.dropdown-featured-title{font-family:var(--serif);font-size:1.8rem;line-height:1.15}
+.nav-icons{display:flex;gap:1.3rem}
+.nav-icons svg{width:20px;height:20px;cursor:pointer}
+.hamburger{display:none;background:none;border:0;cursor:pointer;width:32px;height:32px;flex-direction:column;justify-content:center;gap:6px}
+.hamburger span{display:block;height:1.5px;background:var(--black)}
+
+/* MOBILE MENU */
+.mobile-menu{position:fixed;top:0;left:0;bottom:0;width:min(86vw,380px);background:var(--white);z-index:70;transform:translateX(-100%);transition:transform .35s;display:flex;flex-direction:column;overflow-y:auto}
+.mobile-menu.open{transform:none}
+.mobile-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:60;opacity:0;visibility:hidden;transition:.3s}
+.mobile-overlay.open{opacity:1;visibility:visible}
+.mobile-menu-top{display:flex;justify-content:space-between;align-items:center;padding:1.2rem 1.5rem;border-bottom:1px solid var(--line)}
+.mobile-close{background:none;border:0;cursor:pointer}
+.mobile-close svg{width:24px;height:24px}
+.mobile-nav{padding:.5rem 0}
+.mobile-nav>a,.mobile-nav-link{display:block;width:100%;text-align:left;background:none;border:0;font:400 1.5rem var(--serif);padding:.9rem 1.5rem;cursor:pointer}
+.mobile-nav .current{border-left:3px solid var(--black);padding-left:calc(1.5rem - 3px)}
+.mobile-sub{max-height:0;overflow:hidden;transition:max-height .3s;background:var(--grey)}
+.mobile-nav-item.expanded .mobile-sub,.mobile-nav-item.open-default .mobile-sub{max-height:340px}
+.mobile-sub a{display:block;padding:.65rem 2.2rem;font-size:.9rem}
+
+/* PAGE HEADER + FILTER */
+.page-header{display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;padding:4.5rem 4vw 3rem;background:var(--stone)}
+.page-title{font-size:clamp(3rem,7vw,6rem)}
+.page-header-right{text-align:right;font-size:.85rem;color:var(--mid)}
+.page-count{display:block;font-family:var(--serif);font-size:1.6rem;color:var(--black)}
+.breadcrumb{display:flex;gap:.5rem;justify-content:flex-end}
+.breadcrumb a:hover{text-decoration:underline}
+.filter-bar{position:sticky;top:60px;z-index:40;display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;padding:.9rem 4vw;background:var(--white);border-bottom:1px solid var(--line)}
+.filter-label,.sort-label{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mid);margin-right:.4rem}
+.filter-btn{background:none;border:1px solid var(--line);padding:.45rem 1.2rem;font:400 .8rem var(--sans);cursor:pointer;transition:.2s}
+.filter-btn:hover{border-color:var(--black)}
+.filter-btn.active{background:var(--black);color:var(--white);border-color:var(--black)}
+.filter-bar-right{margin-left:auto;display:flex;align-items:center}
+.sort-select{border:1px solid var(--line);background:var(--white);padding:.45rem .8rem;font:300 .85rem var(--sans)}
+
+/* PRODUCTS */
+.collection-section{padding:4.5rem 4vw 1rem}
+.collection-section[hidden]{display:none}
+.section-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:2.2rem;gap:1rem}
+.section-head h2{font-size:clamp(2rem,4vw,3rem)}
+.products-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.6rem}
+.product-img{position:relative;aspect-ratio:3/4;background:var(--grey);overflow:hidden}
+.product-img img{transition:transform .6s}
+.product-card:hover .product-img img{transform:scale(1.04)}
+.placeholder{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--serif);font-size:3.4rem;letter-spacing:.1em;color:var(--black);opacity:.1}
+.product-tag{position:absolute;top:.8rem;left:.8rem;background:var(--black);color:var(--white);font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;padding:.25rem .7rem}
+.product-tag.exclusive{background:var(--white);color:var(--black);border:1px solid var(--black)}
+.product-tag.sale{background:#8a1c1c}
+.product-info{padding-top:.9rem}
+.product-name{font-family:var(--serif);font-size:1.35rem;line-height:1.2}
+.product-material{font-size:.82rem;color:var(--mid)}
+.product-price{font-size:.95rem;margin-top:.2rem;font-weight:400}
+.was{color:var(--mid);text-decoration:line-through;margin-right:.5rem;font-weight:300}
+
+.newsletter{margin-top:5rem;padding:6rem 4vw;text-align:center;background:var(--stone)}
+.newsletter h2{font-size:clamp(2.4rem,5vw,4rem);margin:.4rem 0 1rem}
+.newsletter-sub{color:var(--mid);margin-bottom:2rem}
+.newsletter-form{display:flex;max-width:480px;margin:0 auto;border:1px solid var(--black)}
+.newsletter-form input{flex:1;min-width:0;border:0;background:transparent;padding:1rem 1.2rem;font:inherit}
+.newsletter-form button{border:0;background:var(--black);color:var(--white);padding:0 1.8rem;font:400 .75rem var(--sans);letter-spacing:.14em;text-transform:uppercase;cursor:pointer}
+footer{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:3rem;padding:4.5rem 4vw 3rem}
+.footer-brand{font-family:var(--serif);font-size:2rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600;margin-bottom:.8rem}
+.footer-tagline{color:var(--mid);max-width:32ch;font-size:.9rem}
+footer h4{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;margin-bottom:1rem;font-weight:400;color:var(--mid)}
+footer li a{display:inline-block;padding:.2rem 0;font-size:.92rem}
+footer li a:hover{text-decoration:underline}
+.footer-bottom{display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem;padding:1.4rem 4vw;border-top:1px solid var(--line);font-size:.78rem;color:var(--mid)}
+
+@media(max-width:1024px){
+  .nav-links{display:none}.hamburger{display:flex}.nav-icons{margin-left:auto;margin-right:1.2rem}
+  .products-grid{grid-template-columns:repeat(2,1fr)}
+  footer{grid-template-columns:1fr 1fr}
+}
+@media(max-width:700px){
+  .page-header{flex-direction:column;align-items:flex-start;padding-top:3rem}
+  .page-header-right{text-align:left}.breadcrumb{justify-content:flex-start}
+  .collection-section{padding:3rem 5vw 0}
+  .products-grid{gap:1rem}
+  .filter-bar-right{margin-left:0;width:100%}
+  .nav-icons svg:nth-child(2){display:none}
+  footer{grid-template-columns:1fr}
+  .footer-bottom{flex-direction:column}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<nav id="nav" aria-label="Main">
+  <a class="logo" href="home.html">Noir</a>
+  <ul class="nav-links">
+    <li><a href="home.html">Home</a></li>
+    <li class="nav-item">
+      <a href="Viewwomen.html">Women</a>
+      <div class="dropdown"><div class="dropdown-inner">
+        <div><h4>Clothing</h4><ul><li><a href="Viewwomen.html">Dresses &amp; Skirts</a></li><li><a href="Viewwomen.html">Coats &amp; Jackets</a></li><li><a href="Viewwomen.html">Trousers &amp; Jeans</a></li><li><a href="Viewwomen.html">Tops &amp; Blouses</a></li><li><a href="Viewwomen.html">Knitwear</a></li><li><a href="Viewwomen.html">Jumpsuits</a></li></ul></div>
+        <div><h4>Accessories</h4><ul><li><a href="Viewwomen.html">Bags &amp; Totes</a></li><li><a href="Viewwomen.html">Scarves &amp; Wraps</a></li><li><a href="Viewwomen.html">Belts</a></li><li><a href="Viewwomen.html">Jewellery</a></li><li><a href="Viewwomen.html">Hats</a></li></ul></div>
+        <div><h4>By style</h4><ul><li><a href="Viewwomen.html">Minimal</a></li><li><a href="Viewwomen.html">Evening</a></li><li><a href="Viewwomen.html">Workwear</a></li><li><a href="Viewwomen.html">Weekend</a></li><li><a href="Viewwomen.html">Resort</a></li></ul></div>
+        <div class="dropdown-featured"><div class="label">This season</div><div class="dropdown-featured-title">The Women's<br><em>Winter Edit</em></div><a href="Viewwomen.html" class="link">Shop women</a></div>
+      </div></div>
+    </li>
+    <li class="nav-item">
+      <a href="viewmen.html" class="active" aria-current="page">Men</a>
+      <div class="dropdown"><div class="dropdown-inner">
+        <div><h4>Clothing</h4><ul><li><a href="#sec-tailoring">Coats &amp; Jackets</a></li><li><a href="#sec-tailoring">Suits &amp; Blazers</a></li><li><a href="#sec-tailoring">Trousers</a></li><li><a href="#sec-casual">Shirts</a></li><li><a href="#sec-casual">Knitwear</a></li><li><a href="#sec-casual">Denim</a></li></ul></div>
+        <div><h4>Accessories</h4><ul><li><a href="#sec-accessories">Belts</a></li><li><a href="#sec-accessories">Scarves</a></li><li><a href="#sec-accessories">Bags</a></li><li><a href="#sec-accessories">Wallets</a></li></ul></div>
+        <div><h4>By style</h4><ul><li><a href="viewmen.html">Minimal</a></li><li><a href="viewmen.html">Smart casual</a></li><li><a href="viewmen.html">Workwear</a></li><li><a href="viewmen.html">Weekend</a></li><li><a href="viewmen.html">Formal</a></li></ul></div>
+        <div class="dropdown-featured"><div class="label">This season</div><div class="dropdown-featured-title">The Men's<br><em>Winter Edit</em></div><a href="viewmen.html" class="link">Shop men</a></div>
+      </div></div>
+    </li>
+    <li><a href="#sec-new">New in</a></li>
+    <li><a href="BuyPage.html">Collections</a></li>
+    <li><a href="home.html#story">About</a></li>
+  </ul>
+  <div class="nav-icons">
+    <svg viewBox="0 0 24 24" role="img" aria-label="Search"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
+    <svg viewBox="0 0 24 24" role="img" aria-label="Account"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <svg viewBox="0 0 24 24" role="img" aria-label="Bag"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+  </div>
+  <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu" aria-label="Menu">
+  <div class="mobile-menu-top">
+    <a class="logo" href="home.html">Noir</a>
+    <button class="mobile-close" id="mobileClose" aria-label="Close menu"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <div class="mobile-nav">
+    <a href="home.html">Home</a>
+    <div class="mobile-nav-item">
+      <button class="mobile-nav-link" type="button">Women</button>
+      <div class="mobile-sub"><a href="Viewwomen.html">All women</a><a href="Viewwomen.html">Dresses &amp; Skirts</a><a href="Viewwomen.html">Coats &amp; Jackets</a><a href="Viewwomen.html">Tops &amp; Blouses</a><a href="Viewwomen.html">Knitwear</a></div>
+    </div>
+    <div class="mobile-nav-item">
+      <button class="mobile-nav-link current" type="button">Men</button>
+      <div class="mobile-sub"><a href="viewmen.html">All men</a><a href="#sec-tailoring">Suits &amp; Blazers</a><a href="#sec-casual">Shirts &amp; Knitwear</a><a href="#sec-accessories">Accessories</a></div>
+    </div>
+    <a href="#sec-new">New in</a>
+    <a href="BuyPage.html">Collections</a>
+    <a href="home.html#story">About</a>
+  </div>
+</div>
+<div class="mobile-overlay" id="mobileOverlay"></div>
+
+<header class="page-header">
+  <div>
+    <p class="label">Men · Collection</p>
+    <h1 class="page-title">The Art of<br><em>Restraint</em></h1>
+  </div>
+  <div class="page-header-right">
+    <span class="page-count">148 pieces</span>
+    <div class="breadcrumb"><a href="home.html">Home</a><span>·</span><span>Men</span></div>
+  </div>
+</header>
+
+<div class="filter-bar">
+  <span class="filter-label">Filter</span>
+  <button class="filter-btn active" data-filter="all">All</button>
+  <button class="filter-btn" data-filter="clothing">Clothing</button>
+  <button class="filter-btn" data-filter="accessories">Accessories</button>
+  <button class="filter-btn" data-filter="new">New in</button>
+  <div class="filter-bar-right">
+    <label class="sort-label" for="sort">Sort</label>
+    <select class="sort-select" id="sort">
+      <option value="featured">Featured</option>
+      <option value="low">Price: low to high</option>
+      <option value="high">Price: high to low</option>
+    </select>
+  </div>
+</div>
+
+<main>
+  <section class="collection-section" data-section="all new" id="sec-new">
+    <div class="section-head"><div><p class="label">New in</p><h2>Just arrived</h2></div><a href="#sec-new" class="link">View all new</a></div>
+    <div class="products-grid">
+      <article class="product-card" data-price="29.80"><div class="product-img"><img src="images/man1II.jpg" alt="Piqué polo shirt in cyan" loading="lazy"><span class="product-tag">New</span></div><div class="product-info"><h3 class="product-name">Piqué polo shirt</h3><div class="product-material">Cyan cotton</div><div class="product-price">$29.80</div></div></article>
+      <article class="product-card" data-price="15.67"><div class="product-img"><img src="images/man2II.jpg" alt="Cropped sweatshirt in black" loading="lazy"><span class="product-tag">New</span></div><div class="product-info"><h3 class="product-name">Cropped sweatshirt</h3><div class="product-material">Black brushed cotton</div><div class="product-price">$15.67</div></div></article>
+      <article class="product-card" data-price="20.30"><div class="product-img"><img src="images/man3II.jpg" alt="Tapered fit jogger in black" loading="lazy"><span class="product-tag">New</span></div><div class="product-info"><h3 class="product-name">Tapered fit jogger</h3><div class="product-material">Black cotton fleece</div><div class="product-price">$20.30</div></div></article>
+      <article class="product-card" data-price="485"><div class="product-img"><div class="placeholder" aria-hidden="true">SUIT</div><span class="product-tag exclusive">Exclusive</span></div><div class="product-info"><h3 class="product-name">Single-breasted suit</h3><div class="product-material">Midnight navy wool</div><div class="product-price">$485.00</div></div></article>
+    </div>
+  </section>
+
+  <section class="collection-section" data-section="all clothing" id="sec-tailoring">
+    <div class="section-head"><div><p class="label">Tailoring</p><h2>Suits &amp; blazers</h2></div><a href="#sec-tailoring" class="link">All tailoring</a></div>
+    <div class="products-grid">
+      <article class="product-card" data-price="285"><div class="product-img"><div class="placeholder" aria-hidden="true">BLZR</div><span class="product-tag">Bestseller</span></div><div class="product-info"><h3 class="product-name">Unstructured blazer</h3><div class="product-material">Oat linen</div><div class="product-price">$285.00</div></div></article>
+      <article class="product-card" data-price="195"><div class="product-img"><div class="placeholder" aria-hidden="true">TROU</div></div><div class="product-info"><h3 class="product-name">Pleated dress trousers</h3><div class="product-material">Charcoal wool</div><div class="product-price">$195.00</div></div></article>
+      <article class="product-card" data-price="420"><div class="product-img"><div class="placeholder" aria-hidden="true">COAT</div></div><div class="product-info"><h3 class="product-name">Topcoat</h3><div class="product-material">Camel double-face wool</div><div class="product-price">$420.00</div></div></article>
+      <article class="product-card" data-price="112"><div class="product-img"><div class="placeholder" aria-hidden="true">VEST</div><span class="product-tag sale">Sale</span></div><div class="product-info"><h3 class="product-name">Tweed waistcoat</h3><div class="product-material">Herringbone wool</div><div class="product-price"><span class="was">$168.00</span>$112.00</div></div></article>
+    </div>
+  </section>
+
+  <section class="collection-section" data-section="all clothing" id="sec-casual">
+    <div class="section-head"><div><p class="label">Casual</p><h2>Shirts &amp; knitwear</h2></div><a href="#sec-casual" class="link">All casual</a></div>
+    <div class="products-grid">
+      <article class="product-card" data-price="112"><div class="product-img"><div class="placeholder" aria-hidden="true">SHRT</div></div><div class="product-info"><h3 class="product-name">Band-collar shirt</h3><div class="product-material">White poplin</div><div class="product-price">$112.00</div></div></article>
+      <article class="product-card" data-price="168"><div class="product-img"><div class="placeholder" aria-hidden="true">KNIT</div><span class="product-tag">Bestseller</span></div><div class="product-info"><h3 class="product-name">Fisherman rib knit</h3><div class="product-material">Oat merino</div><div class="product-price">$168.00</div></div></article>
+      <article class="product-card" data-price="185"><div class="product-img"><div class="placeholder" aria-hidden="true">DENIM</div></div><div class="product-info"><h3 class="product-name">Straight-cut denim</h3><div class="product-material">Raw selvedge indigo</div><div class="product-price">$185.00</div></div></article>
+      <article class="product-card" data-price="132"><div class="product-img"><div class="placeholder" aria-hidden="true">OVST</div></div><div class="product-info"><h3 class="product-name">Linen overshirt</h3><div class="product-material">Stone washed linen</div><div class="product-price">$132.00</div></div></article>
+    </div>
+  </section>
+
+  <section class="collection-section" data-section="all accessories" id="sec-accessories">
+    <div class="section-head"><div><p class="label">Accessories</p><h2>The details that count</h2></div><a href="#sec-accessories" class="link">All accessories</a></div>
+    <div class="products-grid">
+      <article class="product-card" data-price="185"><div class="product-img"><div class="placeholder" aria-hidden="true">BAG</div><span class="product-tag">New</span></div><div class="product-info"><h3 class="product-name">Canvas weekender</h3><div class="product-material">Waxed canvas, olive</div><div class="product-price">$185.00</div></div></article>
+      <article class="product-card" data-price="75"><div class="product-img"><div class="placeholder" aria-hidden="true">BELT</div><span class="product-tag">Bestseller</span></div><div class="product-info"><h3 class="product-name">Bridle leather belt</h3><div class="product-material">Tan, 35mm</div><div class="product-price">$75.00</div></div></article>
+      <article class="product-card" data-price="68"><div class="product-img"><div class="placeholder" aria-hidden="true">SCRF</div></div><div class="product-info"><h3 class="product-name">Merino scarf</h3><div class="product-material">Charcoal, 200 × 30cm</div><div class="product-price">$68.00</div></div></article>
+      <article class="product-card" data-price="88"><div class="product-img"><div class="placeholder" aria-hidden="true">WLLT</div><span class="product-tag exclusive">Exclusive</span></div><div class="product-info"><h3 class="product-name">Slim card wallet</h3><div class="product-material">Black full-grain leather</div><div class="product-price">$88.00</div></div></article>
+    </div>
+  </section>
+</main>
+
+<section class="newsletter">
+  <p class="label">Stay in the know</p>
+  <h2>The quiet <em>dispatch</em></h2>
+  <p class="newsletter-sub">New arrivals and behind-the-scenes, nothing more.</p>
+  <form class="newsletter-form" id="newsletterForm">
+    <input type="email" placeholder="Your email address" aria-label="Email address" required>
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
+
+<footer>
+  <div><div class="footer-brand">Noir</div><p class="footer-tagline">Minimal clothing for a considered life. Designed in silence, worn with intention.</p></div>
+  <div><h4>Shop</h4><ul><li><a href="Viewwomen.html">Women</a></li><li><a href="viewmen.html">Men</a></li><li><a href="#sec-new">New in</a></li><li><a href="#">Sale</a></li></ul></div>
+  <div><h4>Info</h4><ul><li><a href="home.html#story">About us</a></li><li><a href="#">Sustainability</a></li><li><a href="#">Careers</a></li><li><a href="#">Press</a></li></ul></div>
+  <div><h4>Help</h4><ul><li><a href="#">Shipping</a></li><li><a href="#">Returns</a></li><li><a href="#">Sizing guide</a></li><li><a href="#">Contact</a></li></ul></div>
+</footer>
+<div class="footer-bottom"><span>© 2026 Noir. All rights reserved.</span><span>Privacy policy · Terms of service</span></div>
+
+<script>
+const nav = document.getElementById('nav');
+addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 60), {passive:true});
+
+// Filter
+const btns = document.querySelectorAll('.filter-btn'), secs = document.querySelectorAll('.collection-section');
+btns.forEach(b => b.addEventListener('click', () => {
+  btns.forEach(x => x.classList.toggle('active', x === b));
+  secs.forEach(s => s.hidden = !s.dataset.section.split(' ').includes(b.dataset.filter));
+}));
+
+// Sort (inside each section)
+document.querySelectorAll('.products-grid').forEach(g => [...g.children].forEach((c, i) => c.dataset.i = i));
+document.getElementById('sort').addEventListener('change', e => {
+  const v = e.target.value;
+  document.querySelectorAll('.products-grid').forEach(g => {
+    [...g.children].sort((a, b) =>
+      v === 'low' ? a.dataset.price - b.dataset.price :
+      v === 'high' ? b.dataset.price - a.dataset.price : a.dataset.i - b.dataset.i
+    ).forEach(c => g.appendChild(c));
+  });
+});
+
+// Mobile menu
+const menu = document.getElementById('mobileMenu'), overlay = document.getElementById('mobileOverlay'), burger = document.getElementById('hamburger');
+function setMenu(open){
+  menu.classList.toggle('open', open); overlay.classList.toggle('open', open);
+  burger.setAttribute('aria-expanded', open); document.body.style.overflow = open ? 'hidden' : '';
+}
+burger.addEventListener('click', () => setMenu(true));
+document.getElementById('mobileClose').addEventListener('click', () => setMenu(false));
+overlay.addEventListener('click', () => setMenu(false));
+menu.querySelectorAll('.mobile-sub a').forEach(a => a.addEventListener('click', () => setMenu(false)));
+addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
+document.querySelectorAll('.mobile-nav-item').forEach(item => {
+  item.querySelector('.mobile-nav-link').addEventListener('click', () => {
+    const was = item.classList.contains('expanded');
+    document.querySelectorAll('.mobile-nav-item').forEach(i => i.classList.remove('expanded'));
+    if (!was) item.classList.add('expanded');
+  });
+});
+
+// Newsletter
+document.getElementById('newsletterForm').addEventListener('submit', e => {
+  e.preventDefault(); e.target.querySelector('button').textContent = 'Subscribed'; e.target.reset();
+});
+</script>
+</body>
+</html>
